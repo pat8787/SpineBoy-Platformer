@@ -16,7 +16,8 @@
     "@ahovakimyan/cordova-plugin-wkwebviewxhrfix": "github:AraHovakimyan/cordova-plugin-wkwebviewxhrfix",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^6.2.0",
-    "cordova-plugin-browsersync": "^1.1.0"
+    "cordova-plugin-browsersync": "^1.1.0",
+    "cordova-plugin-wkwebviewxhrfix": "^0.1.0"
   },
   "cordova": {
     "platforms": [
