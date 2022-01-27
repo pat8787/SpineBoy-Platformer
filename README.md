@@ -3,6 +3,8 @@
 
 `npm i --save phaser`
 
+`npm i phaser3-rex-plugins`
+
 ### Add Browser Platform:
 `cordova platform add browser`
 
