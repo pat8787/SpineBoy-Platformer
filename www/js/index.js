@@ -39,11 +39,14 @@ var cursors;
 var joystickCursors;
 var player;
 var isJumping;
+var stars;
+var starsText;
+var youWinText;
 
 function preload() {
     this.load.image('ground', './img/platform.png');
     this.load.image('background', './img/city.png');
-
+    this.load.image('star', './img/object/star.png');
     // Load Spineboy
     this.load.setPath('./img/spineboy/');
     this.load.spine('sb', 'demos.json', [ 'atlas1.atlas' ], true);
@@ -57,7 +60,8 @@ function create() {
     var platforms = this.physics.add.staticGroup();
     platforms.create(deviceWidth/2, deviceHeight * 0.9, 'ground').setScale(2.5).refreshBody();
 
-    var spineBoy = this.add.spine(deviceWidth*0.2, deviceHeight/4, 'sb.spineboy', 'idle', true);
+    // SPINEBOY
+    var spineBoy = this.add.spine(deviceWidth*0.2, deviceHeight*0.6, 'sb.spineboy', 'idle', true);
     
     spineBoy.setInteractive();
     console.log(spineBoy)
@@ -68,6 +72,44 @@ function create() {
     
     this.input.enableDebug(player, 0xff00ff);
 
+    // STARS
+    stars = this.physics.add.group({
+        key: 'star',
+        repeat: 5,
+        setXY: { x: deviceWidth/2, y: 0, stepX: 70 }
+    });
+
+    stars.children.iterate(function (child) {
+
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+    });
+
+    this.physics.add.collider(player, platforms);
+    this.physics.add.collider(stars, platforms);
+
+    // Interact
+    this.physics.add.overlap(player, stars, collectStar, null, this);
+
+    // HUD Text
+    starsText = this.add.text(deviceWidth/2, deviceHeight*0.075, 'x', {
+        fontSize: '15pt',
+        align: "center"
+    });
+    starsText.setOrigin(0.5, 0.5);
+
+    updateStarsText();
+    console.log(starsText);
+
+    youWinText = this.add.text(deviceWidth/2, deviceHeight/2, 'YOU WIN!', {
+        fontSize: '30pt',
+        align: "center"
+    });
+    youWinText.visible = false;
+    youWinText.setOrigin(0.5, 0.5);
+
+
+    // JOYSTICK
     var joyStick = new VirtualJoystick(this, {
         x: deviceWidth * 0.10,
         y: deviceHeight * 0.75,
@@ -76,6 +118,7 @@ function create() {
 
     joystickCursors = joyStick.createCursorKeys();
 
+    // A+B Button
     createBtn(this, {
         x: deviceWidth * 0.8,
         y: deviceHeight * 0.75,
@@ -90,11 +133,18 @@ function create() {
         name: 'B'
     }, handleSpineBoyShoot);
 
-
-    this.physics.add.collider(player, platforms);
-
     window.addEventListener('resize', resize);
     resize();
+}
+
+function updateStarsText() {
+    starsText.setText("Stars left: " + stars.countActive() + "/"+ stars.children.size);
+}
+
+function collectStar (player, star)
+{
+    star.disableBody(true, true);
+    updateStarsText();
 }
 
 const GetValue = Phaser.Utils.Objects.GetValue;
@@ -105,7 +155,7 @@ var createBtn = function (scene, config, onClick) {
     var name = GetValue(config, 'name', '');
 
     var btn = scene.add.rectangle(x, y, 50, 50, color)
-        .setName(name);
+        .setName(name).setAlpha(0.75);
     scene.add.text(x, y, name, {
         fontSize: '20pt'
     })
@@ -139,7 +189,11 @@ function handleSpineBoyShoot(button, gameObject) {
 }
 
 function update() {
-    
+
+    if (stars.countActive() == '0') {
+        youWinText.visible = true;
+    }
+
     if (player.getCurrentAnimation().name != 'jump') {
         isJumping = false;
     }
