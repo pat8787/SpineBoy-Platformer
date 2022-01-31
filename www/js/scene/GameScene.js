@@ -10,9 +10,6 @@ var stars;
 var starsText;
 var youWinText;
 
-var deviceWidth = 844;//innerWidth * window.devicePixelRatio;
-var deviceHeight = 390; //innerHeight * window.devicePixelRatio;
-
 class GameScene extends Phaser.Scene {
     constructor() {
         super("gameScene");
@@ -28,6 +25,9 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        var deviceWidth = MainIndex.deviceWidth;
+        var deviceHeight = MainIndex.deviceHeight;
+
         cursors = this.input.keyboard.createCursorKeys();
 
         this.add.image(deviceWidth/2, deviceHeight/2, 'background');
@@ -123,13 +123,13 @@ class GameScene extends Phaser.Scene {
             isJumping = false;
         }
 
-        // if (cursors.left.isDown) {
+        // if (cursors.left.isDown) { // Keyboard Left Arrow
         if (joystickCursors.left.isDown) {
             player.body.setVelocityX(-160);
             spineboyRun();
             player.body.setOffset(player.width, 0);
             player.setScale(-0.15, 0.15);
-        // } else if (cursors.right.isDown) {
+        // } else if (cursors.right.isDown) { // Keyboard Left Arrow
         } else if (joystickCursors.right.isDown) {
             player.body.setVelocityX(160);
             spineboyRun();
