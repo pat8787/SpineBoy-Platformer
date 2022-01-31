@@ -1,7 +1,7 @@
 import Button from '../../node_modules/phaser3-rex-plugins/plugins/button.js';
 import MainIndex from '../index.js';
 
-class TitleScene extends Phaser.Scene {
+export default class TitleScene extends Phaser.Scene {
     constructor() {
         super("titleScene");
     }
@@ -21,5 +21,3 @@ class TitleScene extends Phaser.Scene {
         }, this);
     }
 }
-
-export default TitleScene;

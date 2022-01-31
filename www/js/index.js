@@ -1,5 +1,3 @@
-import VirtualJoystick from '../node_modules/phaser3-rex-plugins/plugins/virtualjoystick.js';
-import Button from '../node_modules/phaser3-rex-plugins/plugins/button.js';
 import GameScene from './scene/GameScene.js';
 import TitleScene from './scene/TitleScene.js';
 
